@@ -8,18 +8,16 @@ commendations_file = 'possible_commendations.json'
 
 
 def find_schoolkid(schoolkid_name) -> Schoolkid:
-    while True:
-        schoolkids = Schoolkid.objects.filter(full_name__contains=schoolkid_name)
-        if schoolkids.count() == 1:
-            return schoolkids.first()
-        elif not schoolkids:
-            schoolkid_name = input('Ничего не найдено, попробуйте ввести имя ещё раз: ')
-        else:
-            schoolkid_name = input('Найдено несколько учеников. Пожалуйста, уточните имя: ')
+    schoolkids = Schoolkid.objects.filter(full_name__contains=schoolkid_name)
+    if schoolkids.count() == 1:
+        return schoolkids.first()
+    elif not schoolkids:
+        print('Ничего не найдено. Проверьте, правильно ли вы указали имя ученика.')
+    else:
+        print('Найдено несколько учеников, необходимо уточнить ФИО ученика.')
 
 
-def create_commendation(schoolkid_name, subject_title):
-    schoolkid = find_schoolkid(schoolkid_name)
+def create_commendation(schoolkid, subject_title):
     lessons = Lesson.objects.filter(year_of_study=schoolkid.year_of_study,
                                     group_letter=schoolkid.group_letter,
                                     subject__title__exact=subject_title)
@@ -42,8 +40,7 @@ def create_commendation(schoolkid_name, subject_title):
         print(f'Похвала от учителя {last_lesson.teacher.full_name} за последний урок добавлена!')
 
 
-def remove_chastisements(schoolkid_name):
-    schoolkid = find_schoolkid(schoolkid_name)
+def remove_chastisements(schoolkid):
     chastisements = Chastisement.objects.filter(schoolkid=schoolkid)
     if not chastisements:
         print('Замечаний нет!')
@@ -52,8 +49,7 @@ def remove_chastisements(schoolkid_name):
         print('Замечания удалены!')
 
 
-def fix_marks(schoolkid_name):
-    schoolkid = find_schoolkid(schoolkid_name)
+def fix_marks(schoolkid):
     bad_marks = Mark.objects.filter(schoolkid=schoolkid, points__in=[2, 3])
     if not bad_marks:
         print('Плохих оценок не обнаружено. Молодец!')
