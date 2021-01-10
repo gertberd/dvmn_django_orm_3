@@ -31,7 +31,7 @@ def create_commendation(schoolkid, subject_title):
                 possible_commendations = data.get('commendations')
                 commendation_text = choice(possible_commendations)
         except FileNotFoundError:
-            commendation_text = input(f'Файл {commendations_file} не обнаружен. Введите текст похвалы:')
+            commendation_text = input(f'Файл {commendations_file} не обнаружен. Введите текст похвалы: ')
         Commendation.objects.create(text=commendation_text,
                                     created=last_lesson.date,
                                     schoolkid=schoolkid,
