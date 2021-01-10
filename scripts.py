@@ -1,6 +1,7 @@
 import json
 from random import choice
 
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from datacenter.models import Commendation, Schoolkid, Lesson, Chastisement, Mark
 
 
@@ -8,13 +9,13 @@ commendations_file = 'possible_commendations.json'
 
 
 def find_schoolkid(schoolkid_name) -> Schoolkid:
-    schoolkids = Schoolkid.objects.filter(full_name__contains=schoolkid_name)
-    if schoolkids.count() == 1:
-        return schoolkids.first()
-    elif not schoolkids:
-        print('Ничего не найдено. Проверьте, правильно ли вы указали имя ученика.')
-    else:
+    try:
+        schoolkid = Schoolkid.objects.get(full_name__contains=schoolkid_name)
+        return schoolkid
+    except MultipleObjectsReturned:
         print('Найдено несколько учеников, необходимо уточнить ФИО ученика.')
+    except ObjectDoesNotExist:
+        print('Ничего не найдено. Проверьте, правильно ли вы указали имя ученика.')
 
 
 def create_commendation(schoolkid, subject_title):
