@@ -28,8 +28,8 @@ def create_commendation(schoolkid, subject_title):
     last_lesson = lessons.order_by('date').last()
     try:
         with open(COMMENDATIONS_FILEPATH, encoding='utf8') as json_file:
-            data = json.load(json_file)
-            possible_commendations = data.get('commendations')
+            commendations_dict = json.load(json_file)
+            possible_commendations = commendations_dict.get('commendations')
             commendation_text = choice(possible_commendations)
     except FileNotFoundError:
         commendation_text = input(f'Файл {COMMENDATIONS_FILEPATH} не обнаружен. Введите текст похвалы: ')
