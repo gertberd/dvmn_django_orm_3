@@ -24,21 +24,21 @@ def create_commendation(schoolkid, subject_title):
                                     subject__title__exact=subject_title)
     if not lessons:
         print('Уроки не обнаружены, название предмета написано без ошибок?')
-    else:
-        last_lesson = lessons.order_by('date').last()
-        try:
-            with open(commendations_file, encoding='utf8') as json_file:
-                data = json.load(json_file)
-                possible_commendations = data.get('commendations')
-                commendation_text = choice(possible_commendations)
-        except FileNotFoundError:
-            commendation_text = input(f'Файл {commendations_file} не обнаружен. Введите текст похвалы: ')
-        Commendation.objects.create(text=commendation_text,
-                                    created=last_lesson.date,
-                                    schoolkid=schoolkid,
-                                    subject=last_lesson.subject,
-                                    teacher=last_lesson.teacher)
-        print(f'Похвала от учителя {last_lesson.teacher.full_name} за последний урок добавлена!')
+        return
+    last_lesson = lessons.order_by('date').last()
+    try:
+        with open(COMMENDATIONS_FILEPATH, encoding='utf8') as json_file:
+            data = json.load(json_file)
+            possible_commendations = data.get('commendations')
+            commendation_text = choice(possible_commendations)
+    except FileNotFoundError:
+        commendation_text = input(f'Файл {COMMENDATIONS_FILEPATH} не обнаружен. Введите текст похвалы: ')
+    Commendation.objects.create(text=commendation_text,
+                                created=last_lesson.date,
+                                schoolkid=schoolkid,
+                                subject=last_lesson.subject,
+                                teacher=last_lesson.teacher)
+    print(f'Похвала от учителя {last_lesson.teacher.full_name} за последний урок добавлена!')
 
 
 def remove_chastisements(schoolkid):
