@@ -5,7 +5,7 @@ from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from datacenter.models import Commendation, Schoolkid, Lesson, Chastisement, Mark
 
 
-commendations_file = 'possible_commendations.json'
+COMMENDATIONS_FILEPATH = 'possible_commendations.json'
 
 
 def find_schoolkid(schoolkid_name) -> Schoolkid:
